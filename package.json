@@ -1,0 +1,17 @@
+{
+  "name": "react-graphql",
+  "version": "1.0.0",
+  "main": "index.js",
+  "repository": "https://github.com/0r0loo/react-graphql-practice.git",
+  "author": "chotaegyu <chotg5592@gmail.com>",
+  "license": "MIT",
+  "private": true,
+  "workspaces": [
+    "client",
+    "server"
+  ],
+  "scripts": {
+    "client": "yarn workspace client start",
+    "server": "yarn workspace server start"
+  }
+}
