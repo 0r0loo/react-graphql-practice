@@ -7,9 +7,11 @@ const messagesRoute = [
   {
     method: 'get',
     route: '/messages',
-    handler: (req, res) => {
+    handler: ({ query: { cursor = '' } }, res) => {
       const msgs = getMsgs();
-      res.send(msgs);
+      const fromIndex = msgs.findIndex((msg) => msg.id === cursor) + 1;
+      console.log(msgs.slice(fromIndex, fromIndex + 15));
+      res.send(msgs.slice(fromIndex, fromIndex + 15));
     },
   },
   {
@@ -67,13 +69,16 @@ const messagesRoute = [
   {
     method: 'delete',
     route: '/messages/:id',
-    handler: ({ body, params: { id } }, res) => {
+    handler: (req, res) => {
+      const {
+        params: { id },
+        query: { userId },
+      } = req;
       try {
         const msgs = getMsgs();
         const targetIndex = msgs.findIndex((msg) => msg.id === id);
         if (targetIndex < 0) throw '메시지가 없습니다.';
-        if (msgs[targetIndex].userId !== body.userId)
-          throw '사용자가 없습니다.';
+        if (msgs[targetIndex].userId !== userId) throw '사용자가 다릅니다.';
         msgs.splice(targetIndex, 1);
         setMsgs(msgs);
         res.send(id);
